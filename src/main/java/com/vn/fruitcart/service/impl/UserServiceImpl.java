@@ -24,9 +24,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User hadnleCreateUser(User user) {
-		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-		return this.userRepository.save(user);
+	public User hadnleCreateUser(User reqUser) {
+		reqUser.setPassword(this.passwordEncoder.encode(reqUser.getPassword()));
+		return this.userRepository.save(reqUser);
 	}
 
 	@Override
