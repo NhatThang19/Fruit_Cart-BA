@@ -1,23 +1,23 @@
 package com.vn.fruitcart.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.vn.fruitcart.domain.User;
+import com.vn.fruitcart.domain.dto.request.UserReqDTO;
+import com.vn.fruitcart.domain.dto.response.ResultPaginationDTO;
 
 public interface UserService {
     User hadnleCreateUser(User user);
     
-    Optional<User> handleGetUserById(Long id);
+    User handleGetUserById(long id);
     
-    Page<User> handleGetAllUsers(Pageable pageable);
+    ResultPaginationDTO handleGetAllUsers(Pageable pageable);
     
     List<User> handleGetAllUsers();
     
-    User handleUpdateUser(Long id, User userDetails);
+    User handleUpdateUser(UserReqDTO userUpdate);
     
-    void handleDeleteUser(Long id);
+    void handleDeleteUser(long id);
 }

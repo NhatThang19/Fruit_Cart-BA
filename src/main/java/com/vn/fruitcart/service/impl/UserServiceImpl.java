@@ -1,7 +1,7 @@
 package com.vn.fruitcart.service.impl;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,8 +9,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.vn.fruitcart.domain.User;
+import com.vn.fruitcart.domain.dto.request.UserReqDTO;
+import com.vn.fruitcart.domain.dto.response.ResultPaginationDTO;
+import com.vn.fruitcart.domain.dto.response.UserResDTO;
+import com.vn.fruitcart.exception.ResourceNotFoundException;
 import com.vn.fruitcart.repository.UserRepository;
 import com.vn.fruitcart.service.UserService;
+import com.vn.fruitcart.util.constans.GenderEnum;
+import com.vn.fruitcart.util.mapper.UserMapper;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,39 +30,65 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User hadnleCreateUser(User reqUser) {
-		reqUser.setPassword(this.passwordEncoder.encode(reqUser.getPassword()));
-		return this.userRepository.save(reqUser);
+	public User hadnleCreateUser(User user) {
+		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+		return this.userRepository.save(user);
 	}
 
 	@Override
-	public Optional<User> handleGetUserById(Long id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+	public User handleGetUserById(long id) {
+		User user = userRepository.findById(id)
+	            .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+		 return user;
 	}
 
 	@Override
-	public Page<User> handleGetAllUsers(Pageable pageable) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResultPaginationDTO handleGetAllUsers(Pageable pageable) {
+	    Page<User> pageUser = this.userRepository.findAll(pageable);
+	    ResultPaginationDTO rs = new ResultPaginationDTO();
+	    ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
+
+	    mt.setPage(pageable.getPageNumber() + 1);
+	    mt.setPageSize(pageable.getPageSize());
+	    mt.setPages(pageUser.getTotalPages());
+	    mt.setTotal(pageUser.getTotalElements());
+
+	    rs.setMeta(mt);
+	    
+	    List<UserResDTO> listUser = pageUser.getContent()
+	            .stream()
+	            .map(UserMapper::toResUser)
+	            .collect(Collectors.toList());
+	    
+	    rs.setResult(listUser);
+	    
+	    return rs;
 	}
 
 	@Override
 	public List<User> handleGetAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.userRepository.findAll();
 	}
 
 	@Override
-	public User handleUpdateUser(Long id, User userDetails) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void handleDeleteUser(Long id) {
-		// TODO Auto-generated method stub
+	public User handleUpdateUser(UserReqDTO userUpdate) {
+		User existingUser = this.handleGetUserById(userUpdate.getId());
 		
+		existingUser.setUsername(userUpdate.getUsername());
+		existingUser.setGender(GenderEnum.valueOf(userUpdate.getGender()));
+		existingUser.setPhone(userUpdate.getPhone());
+		existingUser.setAddress(userUpdate.getAddress());
+		existingUser.setAvatar(userUpdate.getAvatar());
+		existingUser.setEnabled(userUpdate.isEnabled());
+		
+		return existingUser;
+	}
+
+	@Override
+	public void handleDeleteUser(long id) {
+		User existingUser = this.handleGetUserById(id);
+		
+		userRepository.delete(existingUser);
 	}
 
 }

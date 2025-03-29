@@ -70,6 +70,15 @@ public class GlobalException {
         res.setMessage("Vi phạm ràng buộc dữ liệu");
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
     }
+	
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<RestResponse<Object>> handleResourceNotFoundException(ResourceNotFoundException ex) {
+		RestResponse<Object> res = new RestResponse<>();
+		res.setStatusCode(HttpStatus.NOT_FOUND.value());
+		res.setMessage(ex.getMessage());
+		res.setError("Resource not found");
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+	}
 
 	private String extractFieldNameFromErrorMessage(String errorMessage) {
 		Pattern pattern = Pattern.compile("Duplicate entry '(.+?)' for key"); 

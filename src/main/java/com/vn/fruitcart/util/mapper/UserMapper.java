@@ -1,11 +1,11 @@
 package com.vn.fruitcart.util.mapper;
 
 import com.vn.fruitcart.domain.User;
-import com.vn.fruitcart.domain.dto.response.ResUserDTO;
+import com.vn.fruitcart.domain.dto.response.UserResDTO;
 
 public class UserMapper {
-	public static ResUserDTO toResUser(User user) {
-		return ResUserDTO.builder()
+	public static UserResDTO toResUser(User user) {
+		return UserResDTO.builder()
 			.id(user.getId())
 			.username(user.getUsername())
 			.email(user.getEmail())
@@ -16,15 +16,15 @@ public class UserMapper {
 			.build();
 	}
 	
-	public static User toUser(ResUserDTO resUserDTO) {
+	public static User toUser(UserResDTO UserResDTO) {
 		return User.builder()
-			.id(resUserDTO.getId())
-			.username(resUserDTO.getUsername())
-			.email(resUserDTO.getEmail())
-			.phone(resUserDTO.getPhone())
-			.address(resUserDTO.getAddress())
-			.avatar(resUserDTO.getAvatar())
-			.enabled(resUserDTO.isEnabled())
+			.id(UserResDTO.getId())
+			.username(UserResDTO.getUsername())
+			.email(UserResDTO.getEmail())
+			.phone(UserResDTO.getPhone())
+			.address(UserResDTO.getAddress())
+			.avatar(UserResDTO.getAvatar())
+			.enabled(UserResDTO.isEnabled())
 			.build();
 	}
 }
