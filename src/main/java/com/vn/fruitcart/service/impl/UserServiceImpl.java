@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +21,10 @@ import com.vn.fruitcart.util.mapper.UserMapper;
 
 @Service
 public class UserServiceImpl implements UserService {
-	
+
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
-	
+
 	public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
@@ -38,31 +39,29 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User handleGetUserById(long id) {
 		User user = userRepository.findById(id)
-	            .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
-		 return user;
+				.orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+		return user;
 	}
 
 	@Override
-	public ResultPaginationDTO handleGetAllUsers(Pageable pageable) {
-	    Page<User> pageUser = this.userRepository.findAll(pageable);
-	    ResultPaginationDTO rs = new ResultPaginationDTO();
-	    ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
+	public ResultPaginationDTO handleGetAllUsers(Specification<User> spec, Pageable pageable) {
+		Page<User> pageUser = this.userRepository.findAll(spec ,pageable);
+		ResultPaginationDTO rs = new ResultPaginationDTO();
+		ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
 
-	    mt.setPage(pageable.getPageNumber() + 1);
-	    mt.setPageSize(pageable.getPageSize());
-	    mt.setPages(pageUser.getTotalPages());
-	    mt.setTotal(pageUser.getTotalElements());
+		mt.setPage(pageable.getPageNumber() + 1);
+		mt.setPageSize(pageable.getPageSize());
+		mt.setPages(pageUser.getTotalPages());
+		mt.setTotal(pageUser.getTotalElements());
 
-	    rs.setMeta(mt);
-	    
-	    List<UserResDTO> listUser = pageUser.getContent()
-	            .stream()
-	            .map(UserMapper::toResUser)
-	            .collect(Collectors.toList());
-	    
-	    rs.setResult(listUser);
-	    
-	    return rs;
+		rs.setMeta(mt);
+
+		List<UserResDTO> listUser = pageUser.getContent().stream().map(UserMapper::toResUser)
+				.collect(Collectors.toList());
+
+		rs.setResult(listUser);
+
+		return rs;
 	}
 
 	@Override
@@ -73,7 +72,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User handleUpdateUser(UserReqDTO userUpdate) {
 		User existingUser = this.handleGetUserById(userUpdate.getId());
-		
+
 		existingUser.setUsername(userUpdate.getUsername());
 		existingUser.setGender(GenderEnum.valueOf(userUpdate.getGender()));
 		existingUser.setPhone(userUpdate.getPhone());
@@ -81,13 +80,13 @@ public class UserServiceImpl implements UserService {
 		existingUser.setAvatar(userUpdate.getAvatar());
 		existingUser.setEnabled(userUpdate.isEnabled());
 		
-		return existingUser;
+		return this.userRepository.save(existingUser);
 	}
 
 	@Override
 	public void handleDeleteUser(long id) {
 		User existingUser = this.handleGetUserById(id);
-		
+
 		userRepository.delete(existingUser);
 	}
 

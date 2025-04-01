@@ -18,5 +18,6 @@ public class UserResDTO {
 	private String phone;
 	private String address;
 	private String avatar;
+	private String gender;
 	private boolean enabled;
 }

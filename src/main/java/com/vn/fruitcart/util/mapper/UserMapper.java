@@ -2,6 +2,7 @@ package com.vn.fruitcart.util.mapper;
 
 import com.vn.fruitcart.domain.User;
 import com.vn.fruitcart.domain.dto.response.UserResDTO;
+import com.vn.fruitcart.util.constans.GenderEnum;
 
 public class UserMapper {
 	public static UserResDTO toResUser(User user) {
@@ -13,6 +14,7 @@ public class UserMapper {
 			.address(user.getAddress())
 			.avatar(user.getAvatar())
 			.enabled(user.isEnabled())
+			.gender(user.getGender() != null ? user.getGender().name() : null)
 			.build();
 	}
 	
@@ -25,6 +27,7 @@ public class UserMapper {
 			.address(UserResDTO.getAddress())
 			.avatar(UserResDTO.getAvatar())
 			.enabled(UserResDTO.isEnabled())
+			.gender(UserResDTO.getGender() != null ? GenderEnum.valueOf(UserResDTO.getGender()) : null)
 			.build();
 	}
 }
