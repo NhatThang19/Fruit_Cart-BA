@@ -2,6 +2,7 @@ package com.vn.fruitcart.controller;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.vn.fruitcart.domain.dto.response.UploadImgRes;
 import com.vn.fruitcart.service.FileService;
 
 @RestController
@@ -21,14 +23,12 @@ public class ImageController {
     private FileService fileService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadImage(
+    public ResponseEntity<UploadImgRes> uploadImage(
             @RequestParam("file") MultipartFile file,
-            @RequestParam(value = "folder", defaultValue = "") String folder) throws URISyntaxException {
-        try {
+            @RequestParam(value = "folder", defaultValue = "") String folder) throws URISyntaxException, IOException {
             String filename = fileService.store(file, folder);
-            return ResponseEntity.ok("Image uploaded successfully: " + filename);
-        } catch (IOException e) {
-            return ResponseEntity.badRequest().body("Upload failed: " + e.getMessage());
-        }
+            UploadImgRes res = new UploadImgRes(filename, Instant.now());
+            return ResponseEntity.ok().body(res);
+       
     }
 }
