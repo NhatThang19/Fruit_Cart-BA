@@ -21,4 +21,6 @@ public interface UserService {
 	User handleUpdateUser(UserReqDTO userUpdate);
 
 	void handleDeleteUser(long id);
+
+	void logUserChange(User user, String action, User oldUser);
 }

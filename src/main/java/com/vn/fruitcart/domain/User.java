@@ -1,5 +1,6 @@
 package com.vn.fruitcart.domain;
 
+import com.vn.fruitcart.domain.base.BaseEntity;
 import com.vn.fruitcart.util.constans.GenderEnum;
 
 import jakarta.persistence.Column;
@@ -28,7 +29,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User {
+public class User extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

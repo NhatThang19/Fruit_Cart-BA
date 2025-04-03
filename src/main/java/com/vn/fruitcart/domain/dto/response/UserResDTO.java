@@ -1,5 +1,7 @@
 package com.vn.fruitcart.domain.dto.response;
 
+import java.time.Instant;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,4 +22,8 @@ public class UserResDTO {
 	private String avatar;
 	private String gender;
 	private boolean enabled;
+	private String createdBy;
+	private Instant createdDate;
+	private String lastModifiedBy;
+	private Instant lastModifiedDate;
 }

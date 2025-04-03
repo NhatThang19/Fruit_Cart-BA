@@ -1,6 +1,7 @@
 package com.vn.fruitcart.util.mapper;
 
 import com.vn.fruitcart.domain.User;
+import com.vn.fruitcart.domain.dto.request.UserReqDTO;
 import com.vn.fruitcart.domain.dto.response.UserResDTO;
 import com.vn.fruitcart.util.constans.GenderEnum;
 
@@ -15,19 +16,22 @@ public class UserMapper {
 			.avatar(user.getAvatar())
 			.enabled(user.isEnabled())
 			.gender(user.getGender() != null ? user.getGender().name() : null)
+			.createdBy(user.getCreatedBy())
+			.createdDate(user.getCreatedDate())
+			.lastModifiedBy(user.getLastModifiedBy())
+			.lastModifiedDate(user.getLastModifiedDate())
 			.build();
 	}
 	
-	public static User toUser(UserResDTO UserResDTO) {
+	public static User toUser(UserReqDTO userUpdate) {
 		return User.builder()
-			.id(UserResDTO.getId())
-			.username(UserResDTO.getUsername())
-			.email(UserResDTO.getEmail())
-			.phone(UserResDTO.getPhone())
-			.address(UserResDTO.getAddress())
-			.avatar(UserResDTO.getAvatar())
-			.enabled(UserResDTO.isEnabled())
-			.gender(UserResDTO.getGender() != null ? GenderEnum.valueOf(UserResDTO.getGender()) : null)
+			.id(userUpdate.getId())
+			.username(userUpdate.getUsername())
+			.phone(userUpdate.getPhone())
+			.address(userUpdate.getAddress())
+			.avatar(userUpdate.getAvatar())
+			.enabled(userUpdate.isEnabled())
+			.gender(userUpdate.getGender() != null ? GenderEnum.valueOf(userUpdate.getGender()) : null)
 			.build();
 	}
 }
