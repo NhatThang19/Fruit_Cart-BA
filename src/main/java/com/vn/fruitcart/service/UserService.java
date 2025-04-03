@@ -10,7 +10,7 @@ import com.vn.fruitcart.domain.dto.request.UserReqDTO;
 import com.vn.fruitcart.domain.dto.response.ResultPaginationDTO;
 
 public interface UserService {
-	User hadnleCreateUser(User user);
+	User handleCreateUser(User user);
 
 	User handleGetUserById(long id);
 

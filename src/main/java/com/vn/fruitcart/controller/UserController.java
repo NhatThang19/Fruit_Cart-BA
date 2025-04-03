@@ -37,7 +37,7 @@ public class UserController {
 	@PostMapping()
 	@ApiMessage("Create new user")
 	public ResponseEntity<UserResDTO> createUser(@Valid @RequestBody User userReq) {
-		User createUser = this.userServiceImpl.hadnleCreateUser(userReq);
+		User createUser = this.userServiceImpl.handleCreateUser(userReq);
 		return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toResUser(createUser));
 	}
 
