@@ -3,7 +3,7 @@ package com.vn.fruitcart.util.mapper;
 import com.vn.fruitcart.domain.User;
 import com.vn.fruitcart.domain.dto.request.UserReqDTO;
 import com.vn.fruitcart.domain.dto.response.UserResDTO;
-import com.vn.fruitcart.util.constans.GenderEnum;
+import com.vn.fruitcart.util.constant.GenderEnum;
 
 public class UserMapper {
 	public static UserResDTO toResUser(User user) {

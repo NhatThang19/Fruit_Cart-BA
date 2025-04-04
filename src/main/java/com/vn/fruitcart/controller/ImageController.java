@@ -24,11 +24,10 @@ public class ImageController {
 
     @PostMapping("/upload")
     public ResponseEntity<UploadImgRes> uploadImage(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam(value = "folder", defaultValue = "") String folder) throws URISyntaxException, IOException {
+            @RequestParam() MultipartFile file,
+            @RequestParam() String folder) throws URISyntaxException, IOException {
             String filename = fileService.store(file, folder);
             UploadImgRes res = new UploadImgRes(filename, Instant.now());
             return ResponseEntity.ok().body(res);
-       
     }
 }

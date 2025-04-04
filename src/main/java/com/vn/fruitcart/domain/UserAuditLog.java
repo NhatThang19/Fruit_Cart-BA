@@ -2,8 +2,12 @@ package com.vn.fruitcart.domain;
 
 import java.time.Instant;
 
+import com.vn.fruitcart.util.constant.ActionLogEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,7 +35,8 @@ public class UserAuditLog {
     private Long userId;
     
     @Column(nullable = false)
-    private String action;
+    @Enumerated(EnumType.STRING)
+    private ActionLogEnum action;
     
     @Column(columnDefinition = "TEXT")
     private String oldValue;

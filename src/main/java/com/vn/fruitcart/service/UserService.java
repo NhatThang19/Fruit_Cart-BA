@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import com.vn.fruitcart.domain.User;
 import com.vn.fruitcart.domain.dto.request.UserReqDTO;
 import com.vn.fruitcart.domain.dto.response.ResultPaginationDTO;
+import com.vn.fruitcart.util.constant.ActionLogEnum;
 
 public interface UserService {
 	User handleCreateUser(User user);
@@ -22,5 +23,5 @@ public interface UserService {
 
 	void handleDeleteUser(long id);
 
-	void logUserChange(User user, String action, User oldUser);
+	void logUserChange(User user, ActionLogEnum action, User oldUser);
 }

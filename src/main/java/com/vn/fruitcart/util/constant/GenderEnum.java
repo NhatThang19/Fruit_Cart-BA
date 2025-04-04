@@ -1,4 +1,4 @@
-package com.vn.fruitcart.util.constans;
+package com.vn.fruitcart.util.constant;
 
 public enum GenderEnum {
 	MALE, FEMALE

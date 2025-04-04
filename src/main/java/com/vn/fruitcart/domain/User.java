@@ -1,7 +1,7 @@
 package com.vn.fruitcart.domain;
 
 import com.vn.fruitcart.domain.base.BaseEntity;
-import com.vn.fruitcart.util.constans.GenderEnum;
+import com.vn.fruitcart.util.constant.GenderEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

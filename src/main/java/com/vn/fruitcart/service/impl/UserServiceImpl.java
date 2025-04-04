@@ -21,7 +21,8 @@ import com.vn.fruitcart.exception.ResourceNotFoundException;
 import com.vn.fruitcart.repository.UserAuditLogRepository;
 import com.vn.fruitcart.repository.UserRepository;
 import com.vn.fruitcart.service.UserService;
-import com.vn.fruitcart.util.constans.GenderEnum;
+import com.vn.fruitcart.util.constant.ActionLogEnum;
+import com.vn.fruitcart.util.constant.GenderEnum;
 import com.vn.fruitcart.util.mapper.UserMapper;
 
 @Service
@@ -37,15 +38,16 @@ public class UserServiceImpl implements UserService {
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.auditLogRepository = auditLogRepository;
-		this.objectMapper =  objectMapper;
+		this.objectMapper = objectMapper;
 	}
 
 	@Override
+	@Transactional
 	public User handleCreateUser(User user) {
 		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-		User savedUser = this.userRepository.save(user);  // Lưu và lấy user đã được persist
-		logUserChange(savedUser, "CREATE", null);
-		return savedUser;
+		this.userRepository.save(user);
+		logUserChange(user, ActionLogEnum.CREATE, null);
+		return user;
 	}
 
 	@Override
@@ -84,47 +86,45 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public User handleUpdateUser(UserReqDTO userUpdate) {
-		// Lấy user hiện tại từ database
-		User existingUser = this.handleGetUserById(userUpdate.getId());
+		User user = this.handleGetUserById(userUpdate.getId());
 		
-		// Lưu bản sao của existingUser để log
 		User oldUser = User.builder()
-				.id(existingUser.getId())
-				.username(existingUser.getUsername())
-				.gender(existingUser.getGender())
-				.phone(existingUser.getPhone())
-				.address(existingUser.getAddress())
-				.avatar(existingUser.getAvatar())
-				.enabled(existingUser.isEnabled())
+				.id(user.getId())
+				.email(user.getEmail())
+				.username(user.getUsername())
+				.password(user.getPassword())
+				.gender(user.getGender())
+				.phone(user.getPhone())
+				.address(user.getAddress())
+				.avatar(user.getAvatar())
+				.enabled(user.isEnabled())
 				.build();
 
-		// Cập nhật thông tin mới
-		existingUser.setUsername(userUpdate.getUsername());
-		existingUser.setGender(GenderEnum.valueOf(userUpdate.getGender()));
-		existingUser.setPhone(userUpdate.getPhone());
-		existingUser.setAddress(userUpdate.getAddress());
-		existingUser.setAvatar(userUpdate.getAvatar());
-		existingUser.setEnabled(userUpdate.isEnabled());
+		user.setUsername(userUpdate.getUsername());
+		user.setGender(GenderEnum.valueOf(userUpdate.getGender()));
+		user.setPhone(userUpdate.getPhone());
+		user.setAddress(userUpdate.getAddress());
+		user.setAvatar(userUpdate.getAvatar());
+		user.setEnabled(userUpdate.isEnabled());
 
-		// Lưu thay đổi
-		User updatedUser = this.userRepository.save(existingUser);
+		User updatedUser = this.userRepository.save(user);
 		
-		// Log thay đổi với oldUser là bản ghi cũ, updatedUser là bản ghi mới
-		logUserChange(updatedUser, "UPDATE", oldUser);
+		logUserChange(updatedUser, ActionLogEnum.UPDATE, oldUser);
 		
 		return updatedUser;
 	}
 
 	@Override
+	@Transactional
 	public void handleDeleteUser(long id) {
-		User existingUser = this.handleGetUserById(id);
+		User user = this.handleGetUserById(id);
 
-		userRepository.delete(existingUser);
-		logUserChange(existingUser, "DELETE", existingUser);
+		userRepository.delete(user);
+		logUserChange(user, ActionLogEnum.DELETE, user);
 	}
 
 	@Override
-	public void logUserChange(User user, String action, User oldUser) {
+	public void logUserChange(User user, ActionLogEnum action, User oldUser) {
 		try {
 			String oldValue = oldUser != null ? objectMapper.writeValueAsString(oldUser) : null;
 			String newValue = objectMapper.writeValueAsString(user);

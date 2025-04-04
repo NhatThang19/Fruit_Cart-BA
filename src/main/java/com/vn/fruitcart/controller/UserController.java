@@ -18,7 +18,7 @@ import com.vn.fruitcart.domain.User;
 import com.vn.fruitcart.domain.dto.request.UserReqDTO;
 import com.vn.fruitcart.domain.dto.response.ResultPaginationDTO;
 import com.vn.fruitcart.domain.dto.response.UserResDTO;
-import com.vn.fruitcart.service.impl.UserServiceImpl;
+import com.vn.fruitcart.service.UserService;
 import com.vn.fruitcart.util.annotation.ApiMessage;
 import com.vn.fruitcart.util.mapper.UserMapper;
 
@@ -28,44 +28,44 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/users")
 public class UserController {
 
-	private final UserServiceImpl userServiceImpl;
+	private final UserService userService;
 
-	public UserController(UserServiceImpl userServiceImpl) {
-		this.userServiceImpl = userServiceImpl;
+	public UserController(UserService userService) {
+		this.userService = userService;
 	}
 
 	@PostMapping()
 	@ApiMessage("Create new user")
 	public ResponseEntity<UserResDTO> createUser(@Valid @RequestBody User userReq) {
-		User createUser = this.userServiceImpl.handleCreateUser(userReq);
+		User createUser = this.userService.handleCreateUser(userReq);
 		return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toResUser(createUser));
 	}
 
 	@PutMapping()
 	@ApiMessage("Update user")
 	public ResponseEntity<UserResDTO> updateUser(@Valid @RequestBody UserReqDTO userReq) {
-		User updateUser = this.userServiceImpl.handleUpdateUser(userReq);
+		User updateUser = this.userService.handleUpdateUser(userReq);
 		return ResponseEntity.ok(UserMapper.toResUser(updateUser));
 	}
 
 	@DeleteMapping("/{id}")
 	@ApiMessage("Delete user")
 	public ResponseEntity<Void> deleteUser(@PathVariable long id) {
-		this.userServiceImpl.handleDeleteUser(id);
+		this.userService.handleDeleteUser(id);
 		return ResponseEntity.ok(null);
 	}
 
 	@GetMapping("/{id}")
 	@ApiMessage("Get user by user")
 	public ResponseEntity<UserResDTO> getUserById(@PathVariable long id) {
-		User user = this.userServiceImpl.handleGetUserById(id);
+		User user = this.userService.handleGetUserById(id);
 		return ResponseEntity.ok(UserMapper.toResUser(user));
 	}
 
 	@GetMapping()
 	@ApiMessage("Get all users")
 	public ResponseEntity<ResultPaginationDTO> getAllUser(@Filter Specification<User> spec, Pageable pageable) {
-		return ResponseEntity.status(HttpStatus.OK).body(this.userServiceImpl.handleGetAllUsers(spec, pageable));
+		return ResponseEntity.status(HttpStatus.OK).body(this.userService.handleGetAllUsers(spec, pageable));
 	}
 
 }
