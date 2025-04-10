@@ -130,7 +130,7 @@ public class UserServiceImpl implements UserService {
 			String newValue = objectMapper.writeValueAsString(user);
 
 			UserAuditLog log = UserAuditLog.builder()
-					.userId(user.getId())
+					.user(user) 
 					.action(action)
 					.oldValue(oldValue)
 					.newValue(newValue)
@@ -141,6 +141,7 @@ public class UserServiceImpl implements UserService {
 			auditLogRepository.save(log);
 		} catch (Exception e) {
 			System.err.println("Failed to create audit log: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 }

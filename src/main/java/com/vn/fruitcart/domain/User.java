@@ -1,8 +1,12 @@
 package com.vn.fruitcart.domain;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vn.fruitcart.domain.base.BaseEntity;
 import com.vn.fruitcart.util.constant.GenderEnum;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,6 +14,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -64,4 +71,11 @@ public class User extends BaseEntity {
 	@NotNull(message = "Enabled cannot be null")
 	private boolean enabled = true;
 
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<UserAuditLog> auditLogs;
+
+	@ManyToOne
+	@JoinColumn(name = "role_id")
+	private Role role;
 }
