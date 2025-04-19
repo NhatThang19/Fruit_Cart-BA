@@ -1,6 +1,8 @@
 package com.vn.fruitcart.domain;
 
 import com.vn.fruitcart.util.constant.MethodEnum;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -44,6 +46,7 @@ public class Permission extends BaseEntity {
 
   @NotBlank(message = "method không được để trống")
   @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
   private MethodEnum method;
 
   @NotBlank(message = "module không được để trống")
