@@ -37,45 +37,46 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class User extends BaseEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 
-	@Column(nullable = false)
-	@NotBlank(message = "Username cannot be blank")
-	@Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
-	private String username;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-	@Column(nullable = false, unique = true)
-	@NotBlank(message = "Email cannot be blank")
-	@Email(message = "Email should be valid")
-	private String email;
+  @Column(nullable = false)
+  @NotBlank(message = "Username cannot be blank")
+  @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
+  private String username;
 
-	@Column(nullable = false)
-	@NotBlank(message = "Password cannot be blank")
-	@Size(min = 6, message = "Password must be at least 6 characters")
-	private String password;
+  @Column(nullable = false)
+  @NotBlank(message = "Email cannot be blank")
+  @Email(message = "Email should be valid")
+  private String email;
 
-	@Pattern(regexp = "(^$|[0-9]{10,15})", message = "Phone number must be 10-15 digits")
-	private String phone;
+  @Column(nullable = false)
+  @NotBlank(message = "Password cannot be blank")
+  @Size(min = 6, message = "Password must be at least 6 characters")
+  private String password;
 
-	private String address;
+  @Pattern(regexp = "(^$|[0-9]{10,15})", message = "Phone number must be 10-15 digits")
+  private String phone;
 
-	private String avatar;
+  private String address;
 
-	@Enumerated(EnumType.STRING)
-	private GenderEnum gender;
+  private String avatar;
 
-	@Column(columnDefinition = "boolean default true")
-	@Builder.Default
-	@NotNull(message = "Enabled cannot be null")
-	private boolean enabled = true;
+  @Enumerated(EnumType.STRING)
+  private GenderEnum gender;
 
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	@JsonIgnore
-	private List<UserAuditLog> auditLogs;
+  @Column(columnDefinition = "boolean default true")
+  @Builder.Default
+  @NotNull(message = "Enabled cannot be null")
+  private boolean enabled = true;
 
-	@ManyToOne
-	@JoinColumn(name = "role_id")
-	private Role role;
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+  @JsonIgnore
+  private List<UserAuditLog> auditLogs;
+
+  @ManyToOne
+  @JoinColumn(name = "role_id")
+  private Role role;
 }

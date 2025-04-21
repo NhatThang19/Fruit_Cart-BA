@@ -9,4 +9,5 @@ import com.vn.fruitcart.domain.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
+  boolean existsByEmail(String email);
 }

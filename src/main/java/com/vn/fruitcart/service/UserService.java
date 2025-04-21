@@ -11,17 +11,20 @@ import com.vn.fruitcart.domain.dto.response.ResultPaginationDTO;
 import com.vn.fruitcart.util.constant.ActionLogEnum;
 
 public interface UserService {
-	User handleCreateUser(User user);
 
-	User handleGetUserById(long id);
+  User handleCreateUser(User user);
 
-	ResultPaginationDTO handleGetAllUsers(Specification<User> spec, Pageable pageable);
+  User handleGetUserById(long id);
 
-	List<User> handleGetAllUsers();
+  ResultPaginationDTO handleGetAllUsers(Specification<User> spec, Pageable pageable);
 
-	User handleUpdateUser(UserReqDTO userUpdate);
+  List<User> handleGetAllUsers();
 
-	void handleDeleteUser(long id);
+  User handleUpdateUser(UserReqDTO userUpdate);
 
-	void logUserChange(User user, ActionLogEnum action, User oldUser);
+  void handleDeleteUser(long id);
+
+  void logUserChange(User user, ActionLogEnum action, User oldUser);
+
+  boolean isEmailExist(String email);
 }

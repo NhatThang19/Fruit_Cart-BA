@@ -1,5 +1,6 @@
 package com.vn.fruitcart.service.impl;
 
+import com.vn.fruitcart.exception.ResourceAlreadyExistsException;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,6 +46,11 @@ public class UserServiceImpl implements UserService {
   @Transactional
   public User handleCreateUser(User user) {
     user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+    boolean isEmailExist = this.isEmailExist(user.getEmail());
+    if (isEmailExist) {
+      throw new ResourceAlreadyExistsException("Email '" + user.getEmail() + "' Đã tồn tại");
+    }
+
     this.userRepository.save(user);
     logUserChange(user, ActionLogEnum.CREATE, null);
     return user;
@@ -52,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User handleGetUserById(long id) {
-    return userRepository.findById(id)
+    return this.userRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
   }
 
@@ -142,5 +148,10 @@ public class UserServiceImpl implements UserService {
       System.err.println("Failed to create audit log: " + e.getMessage());
       e.printStackTrace();
     }
+  }
+
+  @Override
+  public boolean isEmailExist(String email) {
+    return this.userRepository.existsByEmail(email);
   }
 }

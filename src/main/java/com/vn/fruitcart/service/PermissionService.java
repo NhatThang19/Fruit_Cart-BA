@@ -1,7 +1,6 @@
 package com.vn.fruitcart.service;
 
 import com.vn.fruitcart.domain.Permission;
-import com.vn.fruitcart.domain.User;
 import com.vn.fruitcart.domain.dto.response.ResultPaginationDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;

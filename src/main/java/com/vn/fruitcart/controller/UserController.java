@@ -56,7 +56,7 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
-  @ApiMessage("Get user by user")
+  @ApiMessage("Get user by id")
   public ResponseEntity<UserResDTO> getUserById(@PathVariable long id) {
     User user = this.userService.handleGetUserById(id);
     return ResponseEntity.ok(UserMapper.toResUser(user));
@@ -69,5 +69,4 @@ public class UserController {
     return ResponseEntity.status(HttpStatus.OK)
         .body(this.userService.handleGetAllUsers(spec, pageable));
   }
-
 }

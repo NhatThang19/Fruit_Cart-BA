@@ -1,12 +1,9 @@
 package com.vn.fruitcart.exception;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -40,7 +37,8 @@ public class GlobalException {
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<RestResponse<Object>> validationError(MethodArgumentNotValidException ex) {
+  public ResponseEntity<RestResponse<Object>> handleValidationError(
+      MethodArgumentNotValidException ex) {
     BindingResult result = ex.getBindingResult();
     final List<FieldError> fieldErrors = result.getFieldErrors();
 
@@ -55,27 +53,6 @@ public class GlobalException {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
   }
 
-  @ExceptionHandler(DataIntegrityViolationException.class)
-  public ResponseEntity<RestResponse<Object>> handleDataIntegrityViolation(
-      DataIntegrityViolationException ex) {
-
-    String rootCause = ex.getMessage();
-    RestResponse<Object> res = new RestResponse<>();
-
-    if (rootCause.contains("Duplicate entry")) {
-      String fieldName = extractFieldNameFromErrorMessage(rootCause);
-      res.setStatusCode(HttpStatus.CONFLICT.value());
-      res.setError("Duplicate entry");
-      res.setMessage(fieldName + " đã tồn tại trong hệ thống");
-      return ResponseEntity.status(HttpStatus.CONFLICT).body(res);
-    }
-
-    res.setStatusCode(HttpStatus.BAD_REQUEST.value());
-    res.setError("DATA_INTEGRITY_VIOLATION");
-    res.setMessage("Vi phạm ràng buộc dữ liệu");
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(res);
-  }
-
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<RestResponse<Object>> handleResourceNotFoundException(
       ResourceNotFoundException ex) {
@@ -86,16 +63,13 @@ public class GlobalException {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
   }
 
-  private String extractFieldNameFromErrorMessage(String errorMessage) {
-    Pattern pattern = Pattern.compile("Duplicate entry '(.+?)' for key");
-    Matcher matcher = pattern.matcher(errorMessage);
-    if (matcher.find()) {
-      String duplicateValue = matcher.group(1);
-
-      if (duplicateValue.contains("@")) {
-        return "Email";
-      }
-    }
-    return "Dữ liệu";
+  @ExceptionHandler(ResourceAlreadyExistsException.class)
+  public ResponseEntity<RestResponse<Object>> handleReResourceAlreadyExistsException(
+      ResourceAlreadyExistsException ex) {
+    RestResponse<Object> res = new RestResponse<>();
+    res.setStatusCode(HttpStatus.CONFLICT.value());
+    res.setMessage(ex.getMessage());
+    res.setError("Resource Already Exists");
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(res);
   }
 }
