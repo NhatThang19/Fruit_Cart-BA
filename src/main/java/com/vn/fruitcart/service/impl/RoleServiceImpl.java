@@ -1,6 +1,5 @@
 package com.vn.fruitcart.service.impl;
 
-import com.turkraft.springfilter.boot.Filter;
 import com.vn.fruitcart.domain.Permission;
 import com.vn.fruitcart.domain.Role;
 import com.vn.fruitcart.domain.dto.response.ResultPaginationDTO;
@@ -9,15 +8,12 @@ import com.vn.fruitcart.exception.ResourceNotFoundException;
 import com.vn.fruitcart.repository.PermissionRepository;
 import com.vn.fruitcart.repository.RoleRepository;
 import com.vn.fruitcart.service.RoleService;
-import com.vn.fruitcart.util.annotation.ApiMessage;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @Service
 public class RoleServiceImpl implements RoleService {

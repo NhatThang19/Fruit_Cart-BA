@@ -2,7 +2,6 @@ package com.vn.fruitcart.controller;
 
 import com.turkraft.springfilter.boot.Filter;
 import com.vn.fruitcart.domain.Permission;
-import com.vn.fruitcart.domain.User;
 import com.vn.fruitcart.domain.dto.response.ResultPaginationDTO;
 import com.vn.fruitcart.service.PermissionService;
 import com.vn.fruitcart.util.annotation.ApiMessage;
