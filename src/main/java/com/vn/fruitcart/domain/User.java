@@ -72,6 +72,9 @@ public class User extends BaseEntity {
   @NotNull(message = "Enabled cannot be null")
   private boolean enabled = true;
 
+  @Column(columnDefinition = "MEDIUMTEXT")
+  private String refreshToken;
+
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
   @JsonIgnore
   private List<UserAuditLog> auditLogs;

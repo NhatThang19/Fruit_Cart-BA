@@ -27,4 +27,8 @@ public interface UserService {
   void logUserChange(User user, ActionLogEnum action, User oldUser);
 
   boolean isEmailExist(String email);
+
+  User handleGetUserByEmail(String email);
+
+  void updateUserToken(String token, String email);
 }
