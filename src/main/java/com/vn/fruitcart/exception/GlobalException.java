@@ -65,6 +65,26 @@ public class GlobalException {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
   }
 
+  @ExceptionHandler(MissingTokenException.class)
+  public ResponseEntity<RestResponse<Object>> handleMissingTokenException(
+      MissingTokenException ex) {
+    RestResponse<Object> res = new RestResponse<>();
+    res.setStatusCode(HttpStatus.NOT_FOUND.value());
+    res.setMessage(ex.getMessage());
+    res.setError("Token not found");
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
+  }
+
+  @ExceptionHandler(InvalidTokenException.class)
+  public ResponseEntity<RestResponse<Object>> handleInvalidTokenException(
+      InvalidTokenException ex) {
+    RestResponse<Object> res = new RestResponse<>();
+    res.setStatusCode(HttpStatus.CONFLICT.value());
+    res.setMessage(ex.getMessage());
+    res.setError("Invalid Token Exception");
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(res);
+  }
+
   @ExceptionHandler(ResourceAlreadyExistsException.class)
   public ResponseEntity<RestResponse<Object>> handleReResourceAlreadyExistsException(
       ResourceAlreadyExistsException ex) {
@@ -81,7 +101,7 @@ public class GlobalException {
     RestResponse<Object> res = new RestResponse<>();
     res.setStatusCode(HttpStatus.NOT_FOUND.value());
     res.setMessage("Invalid username or password");
-    res.setError("USER_NOT_FOUND");
+    res.setError("User Not Found");
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(res);
   }
 
@@ -104,5 +124,15 @@ public class GlobalException {
     res.setError("Forbidden");
     res.setMessage(ex.getMessage());
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(res);
+  }
+
+  @ExceptionHandler(UnauthorizedException.class)
+  public ResponseEntity<RestResponse<Object>> handleUnauthorizedException(
+      UnauthorizedException ex) {
+    RestResponse<Object> res = new RestResponse<>();
+    res.setStatusCode(HttpStatus.UNAUTHORIZED.value());
+    res.setError("Unauthorized");
+    res.setMessage(ex.getMessage());
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(res);
   }
 }

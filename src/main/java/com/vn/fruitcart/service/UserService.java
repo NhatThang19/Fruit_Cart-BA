@@ -31,4 +31,6 @@ public interface UserService {
   User handleGetUserByEmail(String email);
 
   void updateUserToken(String token, String email);
+
+  User getUserByRefreshTokenAndEmail(String token, String email);
 }
