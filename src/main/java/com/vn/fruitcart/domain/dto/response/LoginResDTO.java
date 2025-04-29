@@ -1,5 +1,6 @@
 package com.vn.fruitcart.domain.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vn.fruitcart.domain.Role;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,9 @@ public class LoginResDTO {
 
   @JsonProperty("access_token")
   private String accessToken;
+
+  @JsonIgnore
+  private String refreshToken;
 
   private UserLogin user;
 

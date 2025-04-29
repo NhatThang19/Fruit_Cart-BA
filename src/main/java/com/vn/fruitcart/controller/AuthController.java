@@ -39,7 +39,7 @@ public class AuthController {
   @ApiMessage("Login user")
   public ResponseEntity<LoginResDTO> login(@Valid @RequestBody LoginReqDTO loginDto) {
     LoginResDTO res = authService.authenticate(loginDto);
-    ResponseCookie cookie = authService.createRefreshTokenCookie(res.getAccessToken());
+    ResponseCookie cookie = authService.createRefreshTokenCookie(res.getRefreshToken());
     return ResponseEntity.ok()
         .header(HttpHeaders.SET_COOKIE, cookie.toString())
         .body(res);
@@ -50,7 +50,7 @@ public class AuthController {
   public ResponseEntity<LoginResDTO> getRefreshToken(
       @CookieValue(name = "refresh_token", required = false) String refresh_token) {
     LoginResDTO res = authService.handleGetRefreshToken(refresh_token);
-    ResponseCookie cookie = authService.createRefreshTokenCookie(res.getAccessToken());
+    ResponseCookie cookie = authService.createRefreshTokenCookie(res.getRefreshToken());
     return ResponseEntity.ok()
         .header(HttpHeaders.SET_COOKIE, cookie.toString())
         .body(res);

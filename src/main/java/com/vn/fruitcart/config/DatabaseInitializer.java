@@ -50,7 +50,7 @@ public class DatabaseInitializer implements CommandLineRunner {
       arr.add(new Permission("Sửa người dùng", "/api/v1/users", MethodEnum.PUT, "USERS"));
       arr.add(new Permission("Xoá người dùng", "/api/v1/users", MethodEnum.DELETE, "USERS"));
       arr.add(new Permission("Lấy người dùng bởi id", "/api/v1/users", MethodEnum.GET, "USERS"));
-      arr.add(new Permission("Lấy người dùng với phân trang", "/api/v1/users", MethodEnum.GET,
+      arr.add(new Permission("Lấy người dùng với phân trang", "/api/v1/users/{id}", MethodEnum.GET,
           "USERS"));
 
       this.permissionRepository.saveAll(arr);
@@ -71,10 +71,10 @@ public class DatabaseInitializer implements CommandLineRunner {
       User adminUser = new User();
       adminUser.setEmail("admin@gmail.com");
       adminUser.setGender(GenderEnum.MALE);
-      adminUser.setUsername("ADMIN");
+      adminUser.setUsername("SUPER_ADMIN");
       adminUser.setPassword(this.passwordEncoder.encode(adminPassword));
 
-      Role adminRole = this.roleRepository.findByName("ADMIN");
+      Role adminRole = this.roleRepository.findByName("SUPER_ADMIN");
       if (adminRole != null) {
         adminUser.setRole(adminRole);
       }

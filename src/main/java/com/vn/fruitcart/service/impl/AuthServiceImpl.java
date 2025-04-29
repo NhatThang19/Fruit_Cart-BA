@@ -11,6 +11,7 @@ import com.vn.fruitcart.exception.UnauthorizedException;
 import com.vn.fruitcart.service.AuthService;
 import com.vn.fruitcart.service.UserService;
 import com.vn.fruitcart.util.SecurityUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -69,6 +70,7 @@ public class AuthServiceImpl implements AuthService {
 
     String refreshToken = securityUtil.createRefreshToken(LoginDTO.getUsername(), res);
     userService.updateUserToken(refreshToken, LoginDTO.getUsername());
+    res.setRefreshToken(refreshToken);
 
     return res;
   }
@@ -84,6 +86,7 @@ public class AuthServiceImpl implements AuthService {
   }
 
   @Override
+  @Transactional
   public LoginResDTO handleGetRefreshToken(String refreshToken) {
     if (refreshToken == null || refreshToken.isEmpty()) {
       throw new MissingTokenException("Không tìm thấy refresh token trong cookie");
@@ -113,6 +116,7 @@ public class AuthServiceImpl implements AuthService {
 
     String newRefreshToken = securityUtil.createRefreshToken(email, res);
     userService.updateUserToken(newRefreshToken, email);
+    res.setRefreshToken(newRefreshToken);
 
     return res;
   }
